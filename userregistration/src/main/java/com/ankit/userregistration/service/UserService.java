@@ -1,6 +1,7 @@
 package com.ankit.userregistration.service;
 
 import com.ankit.userregistration.dao.UserDao;
+import com.ankit.userregistration.entity.EmailService;
 import com.ankit.userregistration.entity.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,9 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    EmailService emailService;
 
     public UserInfo findUserById(long id) {
         Optional<UserInfo> byId =
@@ -24,6 +28,7 @@ public class UserService {
     public String saveUser(UserInfo userInfo) {
         if (userInfo != null) {
             userDao.save(userInfo);
+            emailService.sendEmail(userInfo.getEmailId(), "welcome to the group"+userInfo.getName(), "Hope you will have good time ahead");
             return "User saved successfully";
         }
         return "some issue is there";
